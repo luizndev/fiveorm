@@ -65,7 +65,7 @@ for profile in "$HOME/.profile" "$HOME/.bashrc"; do
     printf '\n# FiveORM CLI\n%s\n' "$path_line" >> "$profile" || fail "Não foi possível atualizar $profile."
   fi
 done
-if [ "$(basename "$SHELL" 2>/dev/null)" = "zsh" ]; then
+if [ "$(basename "$(printenv SHELL 2>/dev/null || printf /bin/sh)")" = "zsh" ]; then
   profile="$HOME/.zshrc"
   if [ ! -f "$profile" ] || ! grep -Fqx "$path_line" "$profile"; then
     printf '\n# FiveORM CLI\n%s\n' "$path_line" >> "$profile" || fail "Não foi possível atualizar $profile."

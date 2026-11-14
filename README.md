@@ -17,6 +17,53 @@ O plano é oferecer integrações para **vRPex, vRP, ESX, Creative, QBCore e Qbo
 - MySQL/MariaDB com o resource `oxmysql` para consultas em runtime.
 - A CLI de setup deve ser executada com acesso de escrita à pasta `resources/`.
 
+## Instalação em um comando (sem Rust)
+
+Depois de publicar uma versão na aba **Releases** do GitHub, o usuário instala o FiveORM com um comando:
+
+**Linux x86_64** (bash/sh, curl ou wget instalado):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/luizndev/fiveorm/main/install.sh | sh
+```
+
+**Windows x64** (PowerShell):
+
+```powershell
+irm https://raw.githubusercontent.com/luizndev/fiveorm/main/install.ps1 | iex
+```
+
+Os dois instaladores baixam o pacote da **última release estável**, verificam seu SHA-256 em `SHA256SUMS` e instalam o executável já compilado:
+
+- Linux: `~/.local/bin/fiveorm`; configura `~/.profile` e `~/.bashrc` (e `~/.zshrc` se necessário).
+- Windows: `%LOCALAPPDATA%\\Programs\\FiveORM\\fiveorm.exe`; adiciona a pasta ao `PATH` do usuário.
+
+Depois de abrir um **novo terminal**, basta executar `fiveorm --version` e `fiveorm init`. Executar novamente o instalador atualiza para a última release estável. Não são necessários Rust, Cargo, npm, Node.js nem privilégios de administrador.
+
+> **Atenção:** enquanto o repositório estiver **privado**, os links públicos de `raw.githubusercontent.com` e `releases/latest/download` não funcionarão para usuários anônimos. Torne-o público **somente após revisar o histórico e eliminar eventuais segredos**, e publique uma Release. Até lá, utilize `cargo install --path .` ou os artefatos privados de Actions com uma conta autorizada.
+>
+> Executar scripts remotos por pipe (`curl | sh` ou `irm | iex`) confia no conteúdo do repositório no momento da execução. Para revisar o instalador primeiro, baixe o arquivo, leia-o e só então execute-o.
+
+### Publicando uma versão instalável
+
+1. No GitHub, confirme que seu repositório está público (para distribuição anônima) e que a aba **Actions** está habilitada.
+2. Na sua máquina com o repositório atualizado, crie e envie uma tag semântica:
+
+```bash
+git switch main
+git pull --ff-only
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+3. O workflow `.github/workflows/release.yml` compila o Rust para **Linux x86_64 (musl)** e **Windows x64**.
+4. A action publica uma GitHub Release com `fiveorm-linux-x86_64.tar.gz`, `fiveorm-windows-x86_64.zip` e `SHA256SUMS`.
+5. A partir daí, os comandos de instalação acima baixam automaticamente o arquivo correto. Para publicar atualizações futuras, envie novas tags, como `v0.1.1`.
+
+O workflow só publica a release quando os builds dos dois sistemas são concluídos; isso não substitui testes manuais com um FXServer.
+
+**WinGet (`winget install ...`) é uma etapa futura**: precisa de um pacote/instalador Windows adequado e de um manifesto aceito pelo repositório do Windows Package Manager. O script PowerShell acima já fornece instalação em um comando, mas não é um pacote WinGet.
+
 ## Instalação da CLI (desenvolvimento)
 
 ```bash
@@ -26,7 +73,7 @@ cargo install --path .
 fiveorm --help
 ```
 
-> O repositório pode exigir autenticação GitHub enquanto for privado. Binários pré-compilados e instaladores serão distribuídos posteriormente.
+> O repositório pode exigir autenticação GitHub enquanto for privado. Instaladores e workflow de release estão no repositório; a instalação pública depende de uma release publicada e da visibilidade pública do repo.
 
 ## Instalação sem Cargo (binários do GitHub Actions)
 

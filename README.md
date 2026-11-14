@@ -28,6 +28,17 @@ fiveorm --help
 
 > O repositório pode exigir autenticação GitHub enquanto for privado. Binários pré-compilados e instaladores serão distribuídos posteriormente.
 
+## Instalação sem Cargo (binários do GitHub Actions)
+
+A cada commit na `main`, o workflow **Rust CI** compila executáveis para Linux e Windows e disponibiliza os artefatos `fiveorm-linux-x86_64` e `fiveorm-windows-x86_64`.
+
+1. Abra **Actions → Rust CI → execução concluída com sucesso → Artifacts**.
+2. Baixe o ZIP do seu sistema operacional e extraia o executável.
+3. Coloque `fiveorm` (Linux) ou `fiveorm.exe` (Windows) em uma pasta do `PATH`; no Linux, execute `chmod +x fiveorm`.
+4. Execute `fiveorm --help`.
+
+Isso **não exige Node.js, npm ou Rust na VPS**. Como o repositório é privado, os artefatos só estão acessíveis para contas autorizadas no GitHub.
+
 ## Primeiros passos
 
 Entre na pasta de um resource FiveM existente, por exemplo `server/resources/[local]/garagem`:

@@ -22,6 +22,12 @@ jobs:
           ./target/release/fiveorm init --framework vrpex
           ./target/release/fiveorm validate
           test -f schema.yml
+      - name: Upload Linux executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: fiveorm-linux-x86_64
+          path: target/release/fiveorm
+          if-no-files-found: error
 
   build-windows:
     runs-on: windows-latest
@@ -31,3 +37,9 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - name: Build Windows CLI
         run: cargo build --release
+      - name: Upload Windows executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: fiveorm-windows-x86_64
+          path: target/release/fiveorm.exe
+          if-no-files-found: error

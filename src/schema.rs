@@ -82,14 +82,15 @@ pub fn init(path: &Path, framework: Option<Framework>) -> Result<()> {
 
     // Framework selection is metadata, not an assumption about a server's actual tables.
     let body = format!(
-        "# FiveORM v0.1 — schema inicial (nenhuma tabela é criada automaticamente)\n\
-         version: 1\n\
-         project:\n\
-           framework: {}\n\
-         database:\n\
-           provider: mysql\n\
-           url_env: DATABASE_URL\n\
-         models: {{}}\n",
+        r#"# FiveORM v0.1 — schema inicial (nenhuma tabela é criada automaticamente)
+version: 1
+project:
+  framework: {}
+database:
+  provider: mysql
+  url_env: DATABASE_URL
+models: {{}}
+"#,
         framework.as_str()
     );
     fs::write(path, body).with_context(|| format!("Falha ao gravar {}", path.display()))?;

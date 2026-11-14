@@ -114,8 +114,11 @@ fn install_runtime(destination: &Path) -> Result<()> {
     // Preflight all files; never overwrite an existing user-modified resource.
     for (name, contents) in RUNTIME {
         let target = destination.join(name);
-        if target.exists() && fs::read_to_string(&target).as_deref() != Ok(*contents) {
-            bail!("FiveORM já existe e foi modificado em {}. Faça backup e revise antes de atualizar.", target.display());
+        if target.exists() {
+            let existing = fs::read_to_string(&target)?;
+            if existing != *contents {
+                bail!("FiveORM já existe e foi modificado em {}. Faça backup e revise antes de atualizar.", target.display());
+            }
         }
     }
     for (name, contents) in RUNTIME {
